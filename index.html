@@ -6,22 +6,122 @@
 <meta name="theme-color" content="#1d4ed8">
 <link rel="manifest" href="./manifest.json">
 <title>원탑부동산 매물관리</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  background:#f3f4f6;
+  font-family:-apple-system,BlinkMacSystemFont,"Noto Sans KR","Malgun Gothic",sans-serif;
+  color:#111827
+}
+
+.wrap{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:24px
+}
+
+.card{
+  width:min(460px,100%);
+  background:white;
+  border-radius:24px;
+  padding:32px 24px;
+  box-shadow:0 12px 40px rgba(0,0,0,.12);
+  text-align:center
+}
+
+.logo{
+  font-size:48px;
+  margin-bottom:8px
+}
+
+h1{
+  margin:0 0 8px;
+  font-size:25px
+}
+
+p{
+  margin:0 0 24px;
+  color:#6b7280;
+  line-height:1.6
+}
+
+button{
+  width:100%;
+  border:0;
+  border-radius:14px;
+  padding:15px 18px;
+  background:#1d4ed8;
+  color:white;
+  font-size:17px;
+  font-weight:700;
+  cursor:pointer
+}
+
+.sub{
+  margin-top:14px;
+  font-size:13px;
+  color:#9ca3af
+}
+</style>
 </head>
 
 <body>
 
+<div class="wrap">
+  <div class="card">
+    <div class="logo">🏠</div>
+
+    <h1>원탑부동산</h1>
+
+    <p>
+      강화도 매물관리<br>
+      앱 설치 후 바로 매물관리 화면으로 이동합니다.
+    </p>
+
+    <button id="open">매물관리 열기</button>
+
+    <div class="sub">
+      원탑부동산 매물관리 시스템
+    </div>
+  </div>
+</div>
+
 <script>
-const GAS_URL = 'https://script.google.com/macros/s/AKfycbyVMSFooD8Q1y9Zc6u53VHOUXLJnT7CmDbsnU35T_9TXJmHHHhh7AuMEXFoRv42vfqb0A/exec';
 
-// 앱 실행 즉시 매물관리 화면으로 이동
-window.location.replace(GAS_URL);
+const GAS_URL =
+'https://script.google.com/macros/s/AKfycbyVMSFooD8Q1y9Zc6u53VHOUXLJnT7CmDbsnU35T_9TXJmHHHhh7AuMEXFoRv42vfqb0A/exec';
 
-// 서비스 워커 유지
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js').catch(() => {});
+function openApp(){
+  window.location.href = GAS_URL;
+}
+
+/*
+  설치된 PWA로 실행된 경우에만
+  바로 매물관리 화면으로 이동
+*/
+const isStandalone =
+  window.matchMedia('(display-mode: standalone)').matches ||
+  window.navigator.standalone === true;
+
+if(isStandalone){
+  window.location.replace(GAS_URL);
+}
+
+document.getElementById('open').addEventListener('click', openApp);
+
+
+/* 서비스 워커 */
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>{
+    navigator.serviceWorker.register('./sw.js').catch(()=>{});
   });
 }
+
 </script>
 
 </body>
